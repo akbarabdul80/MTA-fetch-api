@@ -1,5 +1,4 @@
-firebase-adminsdk.json
-simaterlogin.py
-test.py
-# Project exclude paths
 /venv/
+firebase-adminsdk.json
+simasterlogin.py
+test.py
