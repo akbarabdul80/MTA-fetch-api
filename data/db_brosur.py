@@ -1,7 +1,10 @@
+from typing import List
+
 from firebase_admin import db
 import data.model.data_db as model
 
 import conf.conf_db as conf
+import ext.database_ext as db_ext
 
 
 def drop_table(db_name):
@@ -9,17 +12,22 @@ def drop_table(db_name):
     return ref.delete()
 
 
-def insert_schedule(data: model.DataBrosur):
-    ref = db.reference(conf.TABEL_BROSUR)
-    # print(str(time_start))
-    ref.push({
-        'title': data.title,
-        'date_create': data.date_create,
-        'file_url': data.file_url,
-        'size': data.size,
-        'hits': data.hits,
-    })
+def insert_data(data: model.DataBrosur):
+    db_ext.insert_data_db(data)
+    print("insert data to db" + data.date_create)
+    # ref = db.reference(conf.TABEL_BROSUR)
+    # ref.push({
+    #     'title': data.title,
+    #     'date_create': data.date_create,
+    #     'file_url': data.file_url,
+    #     'size': data.size,
+    #     'hits': data.hits,
+    # })
 
+
+def insert_data_list(data: List[model.DataBrosur]):
+    for item in data:
+        insert_data(item)
 
 def delete_schedule(id_brousr):
     ref = db.reference(conf.TABEL_BROSUR + "/" + id_brousr)

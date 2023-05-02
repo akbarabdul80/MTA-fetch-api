@@ -2,7 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import data.db_brosur as db_brosur
 import data.model.data_db as model_data_db
+import ext.string_ext
+
+# Database
 from conf import conf_db
+import ext.database_ext as db_ext
 
 # Firebase
 import firebase_admin
@@ -67,13 +71,31 @@ for row in rows:
 
     hasil.append(info)
 
+last_brosur = db_ext.get_last_brosur_by_date()
+
+# list brosur
+result_brosur = []
 for data in hasil:
-    db_brosur.insert_schedule(
+    result_brosur.append(
         model_data_db.DataBrosur(
             data[0],
-            data[3],
+            ext.string_ext.format_string_to_date_sqlite(data[3]),
             data[4],
             data[1],
             data[2]
         )
     )
+
+# short brosur by date
+result_brosur.sort(key=lambda x: x.date_create, reverse=False)
+
+# insert to db
+if last_brosur is not None and result_brosur[len(result_brosur) - 1].file_url == last_brosur.file_url:
+    print("Data is up to date")
+    exit()
+else:
+    for data in result_brosur:
+        if last_brosur is not None and data.file_url == last_brosur.file_url:
+            break
+        else:
+            db_brosur.insert_data(data)
