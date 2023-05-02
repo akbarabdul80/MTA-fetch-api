@@ -1,4 +1,5 @@
 /venv/
+/download/
 firebase-adminsdk.json
 simasterlogin.py
 test.py

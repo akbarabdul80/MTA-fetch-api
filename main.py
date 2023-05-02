@@ -12,6 +12,8 @@ import ext.database_ext as db_ext
 import firebase_admin
 from firebase_admin import credentials
 
+from ext.download_etx import download_file_pdf
+
 # Fetch the service account key JSON file contents
 cred = credentials.Certificate(conf_db.CRED_FIREBAE)
 # Initialize the app with a service account, granting admin privileges
@@ -86,7 +88,7 @@ for data in hasil:
         )
     )
 
-# short brosur by date
+# sort brosur by date
 result_brosur.sort(key=lambda x: x.date_create, reverse=False)
 
 # insert to db
@@ -99,3 +101,4 @@ else:
             break
         else:
             db_brosur.insert_data(data)
+            download_file_pdf(data.title, data.file_url)

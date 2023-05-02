@@ -13,21 +13,22 @@ def drop_table(db_name):
 
 
 def insert_data(data: model.DataBrosur):
+    print("insert data to db :" + data.title + " -- " + data.date_create)
     db_ext.insert_data_db(data)
-    print("insert data to db" + data.date_create)
-    # ref = db.reference(conf.TABEL_BROSUR)
-    # ref.push({
-    #     'title': data.title,
-    #     'date_create': data.date_create,
-    #     'file_url': data.file_url,
-    #     'size': data.size,
-    #     'hits': data.hits,
-    # })
+    ref = db.reference(conf.TABEL_BROSUR)
+    ref.push({
+        'title': data.title,
+        'date_create': data.date_create,
+        'file_url': data.file_url,
+        'size': data.size,
+        'hits': data.hits,
+    })
 
 
 def insert_data_list(data: List[model.DataBrosur]):
     for item in data:
         insert_data(item)
+
 
 def delete_schedule(id_brousr):
     ref = db.reference(conf.TABEL_BROSUR + "/" + id_brousr)
